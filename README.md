@@ -32,7 +32,13 @@ pnpm lint       # ESLint (flat config compartilhada) em todos os pacotes
 pnpm typecheck  # tsc --noEmit em todos os pacotes
 ```
 
-Os apps e seus comandos `dev` chegam a partir da Fase 1 (`pnpm --filter shell dev`).
+### Rodando os apps
+
+```bash
+pnpm --filter shell dev       # host (shell) — http://localhost:3000
+```
+
+Build de produção e prévia local: `pnpm --filter <app> build` e `pnpm --filter <app> preview`.
 
 ## Mapa das fases
 
