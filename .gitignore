@@ -1,0 +1,21 @@
+# Dependências
+node_modules/
+
+# Builds
+dist/
+build/
+
+# Module Federation — tipos baixados dos remotes (gerados em dev/build)
+@mf-types/
+.mf/
+
+# Ambiente
+.env
+.env.local
+.env.*.local
+
+# Ferramentas / SO
+coverage/
+.vercel/
+.DS_Store
+*.log

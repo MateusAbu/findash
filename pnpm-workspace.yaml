@@ -1,0 +1,6 @@
+# Declara onde vivem os pacotes do monorepo.
+# Qualquer pasta com package.json dentro desses padrões vira um workspace package.
+packages:
+  - 'apps/*'
+  - 'packages/*'
+  - 'tools/*'

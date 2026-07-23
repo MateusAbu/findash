@@ -1,0 +1,10 @@
+{
+  "name": "findash",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Dashboard de finanças pessoais com microfrontends — Module Federation 2.0 + Rsbuild (projeto de estudo)",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@11.16.0"
+}
