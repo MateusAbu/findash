@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@findash/config": "workspace:*",
+    "@module-federation/rsbuild-plugin": "^2.8.0",
     "@rsbuild/core": "^2.1.7",
     "@rsbuild/plugin-react": "^2.1.0",
     "@types/react": "^19.2.17",

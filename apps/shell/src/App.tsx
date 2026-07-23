@@ -1,3 +1,9 @@
+import { lazy, Suspense } from 'react';
+
+// Este import atravessa a rede: resolve via Module Federation para :3002.
+// lazy + Suspense porque o módulo só existe depois do fetch do chunk remoto.
+const OverviewPage = lazy(() => import('mfe_overview/OverviewPage'));
+
 // Layout mínimo hardcoded (T-1.1). A sidebar real com o design system chega
 // na T-4.2; as rotas na T-4.1. Estilos inline até o Tailwind entrar (Fase 2).
 export default function App() {
@@ -15,7 +21,9 @@ export default function App() {
       </aside>
       <main style={{ flex: 1, padding: 24 }}>
         <h1>FinDash — shell</h1>
-        <p>Host rodando em :3000. Os microfrontends chegam nas próximas fases.</p>
+        <Suspense fallback={<p>Carregando overview de :3002…</p>}>
+          <OverviewPage />
+        </Suspense>
       </main>
     </div>
   );
