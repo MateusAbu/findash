@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    // allowJs dá inputs ao tsc (os presets .js) — sem isso, `tsc --noEmit`
+    // falharia com "no inputs" num pacote que ainda não tem arquivo .ts.
+    // Qualquer .ts criado aqui entra no typecheck automaticamente.
+    "allowJs": true
+  },
+  "include": ["*.js", "*.ts"]
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    // Ambiente-alvo: apps React em browsers modernos.
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+
+    // O tsc não resolve imports de verdade aqui — o Rspack resolve (ADR-001).
+    // "bundler" imita a resolução do bundler: lê o campo `exports` dos
+    // pacotes e aceita imports sem extensão.
+    "moduleResolution": "bundler",
+
+    // Runtime automático de JSX (React 17+): sem `import React` por arquivo.
+    "jsx": "react-jsx",
+
+    // Guarda-chuva: liga strictNullChecks, noImplicitAny, etc.
+    "strict": true,
+
+    // `import type` é apagado no build; import normal permanece. Em MFE,
+    // import que sobrevive vira requisição de rede a um chunk remoto.
+    "verbatimModuleSyntax": true,
+
+    // Bundlers transpilam arquivo por arquivo; proíbe padrões que exigem
+    // conhecimento de outros arquivos (ex.: const enum exportado).
+    "isolatedModules": true,
+
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    // Não checa .d.ts de terceiros (velocidade; erro de lib não é nosso).
+    "skipLibCheck": true,
+
+    // Quem emite JS é o bundler; o tsc só faz typecheck.
+    "noEmit": true
+  }
+}
