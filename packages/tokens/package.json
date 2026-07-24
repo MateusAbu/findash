@@ -1,0 +1,9 @@
+{
+  "name": "@findash/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Design tokens do FinDash — tema Tailwind v4 (@theme) importado em build-time por todos os apps",
+  "exports": {
+    "./theme.css": "./theme.css"
+  }
+}

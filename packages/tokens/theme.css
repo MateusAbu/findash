@@ -1,0 +1,50 @@
+/*
+ * @findash/tokens — a "constituição visual" do FinDash.
+ *
+ * Tailwind v4, config CSS-first: cada variável em @theme vira
+ *   1. uma CSS custom property no CSS final (var(--color-primary)), e
+ *   2. utilities derivadas do namespace (--color-primary → bg-primary,
+ *      text-primary, border-primary...; --radius-card → rounded-card).
+ *
+ * Consumo (T-2.2+), no CSS de cada app:
+ *   @import 'tailwindcss';
+ *   @import '@findash/tokens/theme.css';
+ */
+
+@theme {
+  /* ===== Marca =====
+   * Emerald: verde = gramática visual de finanças (crescimento, positivo).
+   * Trocar a marca inteira de cor = editar estas 3 linhas. */
+  --color-primary: #059669; /* ações principais, links, estados de foco */
+  --color-primary-strong: #047857; /* hover/pressed de elementos primários */
+  --color-primary-soft: #d1fae5; /* fundos suaves: badges, highlights, seleção */
+
+  /* ===== Superfícies =====
+   * Neutros slate — combinam com o verde sem esfriar demais. */
+  --color-surface: #ffffff; /* fundo de cards e painéis */
+  --color-surface-muted: #f8fafc; /* fundo da página, áreas rebaixadas */
+  --color-surface-inverted: #1e293b; /* sidebar e áreas escuras */
+  --color-border: #e2e8f0; /* bordas e divisores padrão */
+
+  /* ===== Texto ===== */
+  --color-text: #0f172a; /* texto principal */
+  --color-text-muted: #64748b; /* texto secundário, legendas, placeholders */
+  --color-text-inverted: #e2e8f0; /* texto sobre superfícies escuras */
+
+  /* ===== Feedback =====
+   * Semânticos: componentes usam ESTES nomes, nunca a cor crua —
+   * income/expense podem divergir de success/error no futuro sem refactor. */
+  --color-success: #059669; /* confirmações; receitas (income) */
+  --color-error: #dc2626; /* erros e ações destrutivas; despesas (expense) */
+  --color-warning: #d97706; /* alertas e estados de atenção */
+
+  /* ===== Tipografia =====
+   * Inter com fallbacks de sistema; o carregamento do webfont (se quisermos
+   * pesos além dos do sistema) será decidido no design system (Fase 2). */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* ===== Raio =====
+   * Dois níveis bastam: superfícies grandes e controles. */
+  --radius-card: 0.75rem; /* cards, modais, painéis (rounded-card) */
+  --radius-control: 0.5rem; /* botões, inputs, selects (rounded-control) */
+}
