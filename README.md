@@ -35,8 +35,9 @@ pnpm typecheck  # tsc --noEmit em todos os pacotes
 ### Rodando os apps
 
 ```bash
-pnpm --filter shell dev          # host (shell) — http://localhost:3000
-pnpm --filter mfe-overview dev   # remote overview — http://localhost:3002
+pnpm --filter shell dev           # host (shell) — http://localhost:3000
+pnpm --filter design-system dev   # design system + playground — http://localhost:3001
+pnpm --filter mfe-overview dev    # remote overview — http://localhost:3002
 ```
 
 Cada app roda standalone: nenhum depende de outro estar no ar para desenvolvimento.

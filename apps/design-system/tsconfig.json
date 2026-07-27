@@ -1,0 +1,4 @@
+{
+  "extends": "@findash/config/tsconfig.base.json",
+  "include": ["src", "rsbuild.config.ts"]
+}

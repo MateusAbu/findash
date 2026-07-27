@@ -1,0 +1,5 @@
+/* Motor do Tailwind (preflight + utilities geradas pelo scan deste app). */
+@import 'tailwindcss';
+
+/* A constituição visual (T-2.1): tokens @theme que alimentam as utilities. */
+@import '@findash/tokens/theme.css';
