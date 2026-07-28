@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 // (main → bootstrap) garante que a federation inicializou antes deste módulo
 // executar. O CSS do Button chega junto, injetado pelo runtime do MF.
 import Button from 'ds/Button';
+import Badge from 'ds/Badge';
 
 // Este import atravessa a rede: resolve via Module Federation para :3002.
 // lazy + Suspense porque o módulo só existe depois do fetch do chunk remoto.
@@ -25,7 +26,9 @@ export default function App() {
       </aside>
       <main style={{ flex: 1, padding: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h1>FinDash — shell</h1>
+          <h1>
+            FinDash — shell <Badge variant="warning">em construção</Badge>
+          </h1>
           <Button onClick={() => alert('Em breve: nova transação (T-3.2)')}>
             + Nova transação
           </Button>

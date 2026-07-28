@@ -1,4 +1,10 @@
 {
   "extends": "@findash/config/tsconfig.base.json",
+  "compilerOptions": {
+    // Tipos federados baixados dos remotes (gerados pelo MF DTS em dev/build).
+    // paths relativos dispensam baseUrl (deprecado no TS 6+).
+    // Estratégia para CI sem dev servers: T-6.1.
+    "paths": { "*": ["./@mf-types/*"] }
+  },
   "include": ["src", "rsbuild.config.ts"]
 }
