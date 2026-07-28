@@ -5,3 +5,14 @@ declare module 'mfe_overview/OverviewPage' {
   const OverviewPage: ComponentType;
   export default OverviewPage;
 }
+
+declare module 'ds/Button' {
+  import type { ComponentProps, ComponentType } from 'react';
+  const Button: ComponentType<
+    ComponentProps<'button'> & {
+      variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+      size?: 'sm' | 'md' | 'lg';
+    }
+  >;
+  export default Button;
+}

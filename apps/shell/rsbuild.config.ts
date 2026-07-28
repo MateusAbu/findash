@@ -12,6 +12,7 @@ export default defineConfig({
       // para :3002 em runtime, não para node_modules.
       remotes: {
         mfe_overview: 'mfe_overview@http://localhost:3002/mf-manifest.json',
+        ds: 'ds@http://localhost:3001/mf-manifest.json',
       },
       // Mesmos singletons do remote: a negociação exige os dois lados.
       shared: {
