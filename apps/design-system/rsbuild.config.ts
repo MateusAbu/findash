@@ -8,8 +8,20 @@ export default defineConfig({
     pluginModuleFederation({
       // O remote de UI. Nos hosts: remotes: { ds: 'ds@http://localhost:3001/...' }
       name: 'ds',
+      // Um expose por componente (decisão T-2.4): hosts baixam só o que usam
+      // e o cache invalida por componente, não pela biblioteca inteira.
       exposes: {
         './Button': './src/components/Button/Button.tsx',
+        './Card': './src/components/Card/Card.tsx',
+        './Input': './src/components/Input/Input.tsx',
+        './Label': './src/components/Input/Label.tsx',
+        './FieldError': './src/components/Input/FieldError.tsx',
+        './Select': './src/components/Select/Select.tsx',
+        './Badge': './src/components/Badge/Badge.tsx',
+        './ProgressBar': './src/components/ProgressBar/ProgressBar.tsx',
+        './Skeleton': './src/components/Skeleton/Skeleton.tsx',
+        './EmptyState': './src/components/EmptyState/EmptyState.tsx',
+        './Toast': './src/components/Toast/Toast.tsx',
       },
       shared: {
         react: { singleton: true },
