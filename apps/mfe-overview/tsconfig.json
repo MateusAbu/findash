@@ -1,4 +1,8 @@
 {
   "extends": "@findash/config/tsconfig.base.json",
+  "compilerOptions": {
+    // Tipos federados do DS baixados pelo MF DTS (estratégia de CI: T-6.1).
+    "paths": { "*": ["./@mf-types/*"] }
+  },
   "include": ["src", "rsbuild.config.ts"]
 }

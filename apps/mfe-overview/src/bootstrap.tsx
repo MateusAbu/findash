@@ -1,5 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { seedDemoData } from '@findash/domain';
+import './styles.css';
 import App from './App';
 
 const container = document.getElementById('root');
@@ -7,8 +9,16 @@ if (!container) {
   throw new Error('Elemento #root não encontrado no HTML gerado pelo Rsbuild');
 }
 
-createRoot(container).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+async function start() {
+  // Conveniência de dev standalone: ?seed=1 popula dados de exemplo ANTES do
+  // mount — fora do React, imune ao double-invoke do StrictMode.
+  if (window.location.search.includes('seed')) await seedDemoData();
+
+  createRoot(container!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
+}
+
+void start();

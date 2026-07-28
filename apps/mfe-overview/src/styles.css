@@ -1,0 +1,3 @@
+/* Cada app compila o próprio CSS (ADR-005). */
+@import 'tailwindcss';
+@import '@findash/tokens/theme.css';
