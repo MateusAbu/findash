@@ -13,6 +13,20 @@ export default tseslint.config(
   js.configs.recommended,
   tseslint.configs.recommended,
   reactHooks.configs.flat.recommended,
+  {
+    rules: {
+      // Convenção: prefixo _ marca descarte intencional (args, destructuring).
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+    },
+  },
   // Desliga regras estilísticas que conflitam com o Prettier — sempre por último.
   prettier,
 );
