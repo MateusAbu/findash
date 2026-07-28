@@ -4,3 +4,7 @@ packages:
   - 'apps/*'
   - 'packages/*'
   - 'tools/*'
+# pnpm bloqueia postinstall de deps por padrão (supply-chain); liberamos
+# apenas as confiáveis que precisam compilar/baixar binários.
+allowBuilds:
+  esbuild: true

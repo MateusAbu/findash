@@ -1,0 +1,22 @@
+{
+  "name": "@findash/domain",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Modelo de dados do FinDash: tipos, repositórios (localStorage) e contrato de eventos",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "smoke": "tsx scripts/smoke.ts"
+  },
+  "devDependencies": {
+    "@findash/config": "workspace:*",
+    "@types/node": "^22.20.1",
+    "eslint": "^9.39.5",
+    "tsx": "^4.23.1",
+    "typescript": "^5.9.3"
+  }
+}
