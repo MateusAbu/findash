@@ -39,6 +39,7 @@ pnpm --filter shell dev           # host (shell) — http://localhost:3000
 pnpm --filter design-system dev   # design system + playground — http://localhost:3001
 pnpm --filter mfe-overview dev    # remote overview — http://localhost:3002 (requer :3001 no ar)
 pnpm --filter mfe-transactions dev # remote transações — http://localhost:3003 (requer :3001 no ar)
+pnpm --filter mfe-goals dev        # remote metas — http://localhost:3004 (requer :3001 no ar)
 ```
 
 Cada app roda standalone: nenhum depende de outro estar no ar para desenvolvimento.
