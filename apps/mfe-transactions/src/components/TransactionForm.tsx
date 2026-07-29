@@ -10,11 +10,11 @@ import {
   EXPENSE_CATEGORIES,
   INCOME_CATEGORIES,
   TYPE_LABELS,
+  parseBRLToCents,
   type Category,
   type Transaction,
   type TransactionType,
 } from '@findash/domain';
-import { parseBRLToCents } from '../lib/money';
 
 export type TransactionFormValues = Omit<Transaction, 'id' | 'createdAt'>;
 
