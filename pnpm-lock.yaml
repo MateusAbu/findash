@@ -219,6 +219,9 @@ importers:
       '@findash/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@findash/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
       react:
         specifier: ^19.2.8
         version: 19.2.8
@@ -241,6 +244,9 @@ importers:
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.7(@module-federation/runtime-tools@2.8.0))(@rspack/core@2.1.5(@module-federation/runtime-tools@2.8.0)(@swc/helpers@0.5.23))
+      '@tailwindcss/postcss':
+        specifier: ^4.3.3
+        version: 4.3.3
       '@types/react':
         specifier: ^19.2.17
         version: 19.2.17
@@ -250,6 +256,9 @@ importers:
       eslint:
         specifier: ^9.39.5
         version: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
+      tailwindcss:
+        specifier: ^4.3.3
+        version: 4.3.3
       typescript:
         specifier: ^5.9.3
         version: 5.9.3

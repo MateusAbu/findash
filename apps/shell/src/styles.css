@@ -1,0 +1,3 @@
+/* O shell compila o próprio CSS de layout (ADR-005) — como todos os apps. */
+@import 'tailwindcss';
+@import '@findash/tokens/theme.css';
