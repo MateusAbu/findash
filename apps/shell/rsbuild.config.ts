@@ -11,13 +11,20 @@ export default defineConfig({
       // alias → URL do manifest. import('mfe_overview/...') passa a resolver
       // para :3002 em runtime, não para node_modules.
       remotes: {
-        mfe_overview: 'mfe_overview@http://localhost:3002/mf-manifest.json',
         ds: 'ds@http://localhost:3001/mf-manifest.json',
+        mfe_overview: 'mfe_overview@http://localhost:3002/mf-manifest.json',
+        mfe_transactions: 'mfe_transactions@http://localhost:3003/mf-manifest.json',
+        mfe_goals: 'mfe_goals@http://localhost:3004/mf-manifest.json',
       },
-      // Mesmos singletons do remote: a negociação exige os dois lados.
+      // loaded-first: sem pré-fetch de TODOS os manifests no init (o default
+      // version-first derrubaria o shell inteiro se UM remote estiver fora —
+      // T-4.1). Manifest de remote morto só falha no clique → ErrorBoundary.
+      shareStrategy: 'loaded-first',
+      // Singletons: react (hooks/context), router (um history só — T-4.1).
       shared: {
         react: { singleton: true },
         'react-dom': { singleton: true },
+        'react-router-dom': { singleton: true },
       },
     }),
   ],
@@ -30,7 +37,9 @@ export default defineConfig({
 
   // Porta fixa por app (shell=3000, ds=3001, overview=3002...): as URLs dos
   // remotes são contrato, não podem variar entre execuções.
-  server: { port: 3000 },
+  // historyApiFallback: deep-linking de SPA — /transactions no F5 devolve o
+  // index.html e o router client-side resolve (em prod: rewrites da Vercel).
+  server: { port: 3000, historyApiFallback: true },
 
   html: { title: 'FinDash' },
 });

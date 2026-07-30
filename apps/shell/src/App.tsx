@@ -1,42 +1,73 @@
-import { lazy, Suspense } from 'react';
-// Import ESTÁTICO de módulo federado: funciona porque o boundary assíncrono
-// (main → bootstrap) garante que a federation inicializou antes deste módulo
-// executar. O CSS do Button chega junto, injetado pelo runtime do MF.
-import Button from 'ds/Button';
+import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import Badge from 'ds/Badge';
+import RemotePage from './remotes/RemotePage';
 
-// Este import atravessa a rede: resolve via Module Federation para :3002.
-// lazy + Suspense porque o módulo só existe depois do fetch do chunk remoto.
-const OverviewPage = lazy(() => import('mfe_overview/OverviewPage'));
+const NAV = [
+  { to: '/', label: 'Dashboard' },
+  { to: '/transactions', label: 'Transações' },
+  { to: '/goals', label: 'Metas' },
+] as const;
 
-// Layout mínimo hardcoded (T-1.1). A sidebar real com o design system chega
-// na T-4.2; as rotas na T-4.1. Estilos inline até o Tailwind entrar (Fase 2).
+// Sidebar provisória com NavLink (o layout final com o DS é a T-4.2).
 export default function App() {
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'sans-serif' }}>
-      <aside style={{ width: 220, padding: 16, background: '#1e293b', color: '#e2e8f0' }}>
-        <strong>FinDash</strong>
-        <nav>
-          <ul style={{ listStyle: 'none', padding: 0, lineHeight: 2 }}>
-            <li>Dashboard</li>
-            <li>Transações</li>
-            <li>Metas</li>
-          </ul>
-        </nav>
-      </aside>
-      <main style={{ flex: 1, padding: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h1>
-            FinDash — shell <Badge variant="warning">em construção</Badge>
-          </h1>
-          <Button onClick={() => alert('Em breve: nova transação (T-3.2)')}>
-            + Nova transação
-          </Button>
-        </div>
-        <Suspense fallback={<p>Carregando overview de :3002…</p>}>
-          <OverviewPage />
-        </Suspense>
-      </main>
-    </div>
+    <BrowserRouter>
+      <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+        <aside style={{ width: 220, padding: 16, background: '#1e293b', color: '#e2e8f0' }}>
+          <strong>
+            FinDash <Badge variant="warning">beta</Badge>
+          </strong>
+          <nav>
+            <ul style={{ listStyle: 'none', padding: 0, lineHeight: 2.2 }}>
+              {NAV.map(({ to, label }) => (
+                <li key={to}>
+                  <NavLink
+                    to={to}
+                    style={({ isActive }) => ({
+                      color: isActive ? '#34d399' : '#e2e8f0',
+                      fontWeight: isActive ? 600 : 400,
+                      textDecoration: 'none',
+                    })}
+                  >
+                    {label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
+
+        <main style={{ flex: 1, padding: 24, background: '#f8fafc' }}>
+          {/* RF-S2: o shell é o dono do mapa de rotas (ADR-006). As páginas
+              vêm dos remotes, burras em relação à URL. */}
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <RemotePage
+                  label="a visão geral"
+                  loader={() => import('mfe_overview/OverviewPage')}
+                />
+              }
+            />
+            <Route
+              path="/transactions"
+              element={
+                <RemotePage
+                  label="as transações"
+                  loader={() => import('mfe_transactions/TransactionsPage')}
+                />
+              }
+            />
+            <Route
+              path="/goals"
+              element={
+                <RemotePage label="as metas" loader={() => import('mfe_goals/GoalsPage')} />
+              }
+            />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   );
 }

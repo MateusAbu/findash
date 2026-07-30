@@ -12,6 +12,7 @@ export default defineConfig({
       remotes: {
         ds: 'ds@http://localhost:3001/mf-manifest.json',
       },
+      shareStrategy: 'loaded-first',
       // API pública do remote: só o que está aqui é visível para hosts.
       exposes: {
         './OverviewPage': './src/pages/OverviewPage.tsx',
@@ -23,6 +24,8 @@ export default defineConfig({
       shared: {
         react: { singleton: true },
         'react-dom': { singleton: true },
+        // Singleton do router: Links/hooks daqui falarão com o router do shell.
+        'react-router-dom': { singleton: true },
       },
     }),
   ],

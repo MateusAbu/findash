@@ -11,12 +11,15 @@ export default defineConfig({
       remotes: {
         ds: 'ds@http://localhost:3001/mf-manifest.json',
       },
+      shareStrategy: 'loaded-first',
       exposes: {
         './GoalsPage': './src/pages/GoalsPage.tsx',
       },
       shared: {
         react: { singleton: true },
         'react-dom': { singleton: true },
+        // Singleton do router: Links/hooks daqui falarão com o router do shell.
+        'react-router-dom': { singleton: true },
       },
     }),
   ],
