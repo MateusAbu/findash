@@ -21,6 +21,10 @@ export default defineConfig({
         'react-dom': { singleton: true },
         // Singleton do router: Links/hooks daqui falarão com o router do shell.
         'react-router-dom': { singleton: true },
+        // T-5.1: a store DEVE ser instância única — sem isso, N stores
+        // independentes (o bug do experimento da fase 5).
+        zustand: { singleton: true },
+        '@findash/store': { singleton: true },
       },
     }),
   ],
