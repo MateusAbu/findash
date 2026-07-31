@@ -1,16 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import Badge from 'ds/Badge';
 import Button from 'ds/Button';
 import Card from 'ds/Card';
 import EmptyState from 'ds/EmptyState';
-import {
-  CATEGORY_LABELS,
-  formatCents,
-  seedDemoData,
-  transactionRepository,
-  type Category,
-  type Transaction,
-} from '@findash/domain';
+import { useFindashStore } from '@findash/store';
+import { CATEGORY_LABELS, formatCents, seedDemoData, type Category } from '@findash/domain';
 import ExpensesByCategoryChart, { type CategoryTotal } from '../components/ExpensesByCategoryChart';
 // O chunk federado desta página carrega o próprio CSS (ADR-005).
 import '../styles.css';
@@ -24,14 +18,15 @@ function formatDate(iso: string): string {
   return `${day}/${month}/${year}`;
 }
 
-// Estado 100% local por enquanto: RF-O4 (reagir a transações criadas em outro
-// MFE) fica DELIBERADAMENTE quebrado até a store singleton da Fase 5.
+// T-5.1: a lista agora vem da store compartilhada — RF-O4 depende de ela ser
+// UMA instância entre os MFEs (singleton no share scope).
 export default function OverviewPage() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const transactions = useFindashStore((s) => s.transactions);
+  const loadTransactions = useFindashStore((s) => s.loadTransactions);
 
   useEffect(() => {
-    void transactionRepository.list().then(setTransactions);
-  }, []);
+    void loadTransactions();
+  }, [loadTransactions]);
 
   const monthKey = new Date().toISOString().slice(0, 7);
   const monthTransactions = useMemo(
@@ -79,7 +74,7 @@ export default function OverviewPage() {
             size="sm"
             onClick={async () => {
               await seedDemoData();
-              setTransactions(await transactionRepository.list());
+              await loadTransactions(true);
             }}
           >
             Usar dados de exemplo

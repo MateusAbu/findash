@@ -1,0 +1,23 @@
+{
+  "name": "@findash/store",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Estado vivo de sessão do FinDash (Zustand) — compartilhado como singleton via Module Federation",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@findash/domain": "workspace:*",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@findash/config": "workspace:*",
+    "eslint": "^9.39.5",
+    "typescript": "^5.9.3"
+  }
+}

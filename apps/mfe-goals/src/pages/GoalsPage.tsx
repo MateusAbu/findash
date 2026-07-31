@@ -1,29 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import EmptyState from 'ds/EmptyState';
-import { emitFindashEvent, goalRepository, type Goal } from '@findash/domain';
+import { useFindashStore } from '@findash/store';
+import { emitFindashEvent } from '@findash/domain';
 import GoalCard from '../components/GoalCard';
 import GoalForm, { type GoalFormValues } from '../components/GoalForm';
 // O chunk federado desta página carrega o próprio CSS (ADR-005).
 import '../styles.css';
 
-// Módulo exposto ('./GoalsPage'). Estado 100% local até a Fase 5.
+// Módulo exposto ('./GoalsPage'). T-5.1: metas na store compartilhada.
 export default function GoalsPage() {
-  const [goals, setGoals] = useState<Goal[]>([]);
+  const goals = useFindashStore((s) => s.goals);
+  const loadGoals = useFindashStore((s) => s.loadGoals);
+  const addGoal = useFindashStore((s) => s.addGoal);
+  const contributeToGoal = useFindashStore((s) => s.contributeToGoal);
 
   useEffect(() => {
-    void goalRepository.list().then(setGoals);
-  }, []);
+    void loadGoals();
+  }, [loadGoals]);
 
   async function handleCreate(values: GoalFormValues) {
-    await goalRepository.add(values);
-    setGoals(await goalRepository.list());
+    await addGoal(values);
   }
 
   async function handleContribute(goalId: string, amountCents: number) {
-    await goalRepository.addContribution(goalId, amountCents);
+    await contributeToGoal(goalId, amountCents);
     // RF-G4: notificação efêmera — o shell mostrará toast na T-5.2.
     emitFindashEvent('findash:goal-contribution', { goalId, amountCents });
-    setGoals(await goalRepository.list());
   }
 
   return (

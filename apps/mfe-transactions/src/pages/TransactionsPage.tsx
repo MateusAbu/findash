@@ -4,13 +4,13 @@ import Card from 'ds/Card';
 import EmptyState from 'ds/EmptyState';
 import Label from 'ds/Label';
 import Select from 'ds/Select';
+import { useFindashStore } from '@findash/store';
 import {
   ALL_CATEGORIES,
   CATEGORY_LABELS,
   TYPE_LABELS,
   emitFindashEvent,
   seedDemoData,
-  transactionRepository,
   type Category,
   type Transaction,
   type TransactionType,
@@ -23,43 +23,40 @@ import '../styles.css';
 type TypeFilter = TransactionType | 'all';
 type CategoryFilter = Category | 'all';
 
-// Módulo exposto ('./TransactionsPage'): burro quanto ao ambiente — não sabe
-// se está no shell ou standalone. Estado 100% LOCAL por enquanto (Fase 5
-// promove a lista para a store compartilhada, de propósito).
+// Módulo exposto ('./TransactionsPage'): burro quanto ao ambiente. T-5.1: a
+// LISTA vive na store compartilhada; filtros e edição seguem locais (regra:
+// compartilhe o mínimo viável).
 export default function TransactionsPage() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const transactions = useFindashStore((s) => s.transactions);
+  const loadTransactions = useFindashStore((s) => s.loadTransactions);
+  const addTransaction = useFindashStore((s) => s.addTransaction);
+  const updateTransaction = useFindashStore((s) => s.updateTransaction);
+  const removeTransaction = useFindashStore((s) => s.removeTransaction);
+
   const [editing, setEditing] = useState<Transaction | null>(null);
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
 
-  async function refresh() {
-    setTransactions(await transactionRepository.list());
-  }
-
-  // Carga inicial: setState no callback da Promise (claramente assíncrono —
-  // a regra set-state-in-effect do react-hooks v7 barra o formato síncrono).
   useEffect(() => {
-    void transactionRepository.list().then(setTransactions);
-  }, []);
+    void loadTransactions();
+  }, [loadTransactions]);
 
   async function handleSubmit(values: TransactionFormValues) {
     if (editing) {
-      await transactionRepository.update(editing.id, values);
+      await updateTransaction(editing.id, values);
       setEditing(null);
     } else {
-      const transaction = await transactionRepository.add(values);
+      const transaction = await addTransaction(values);
       // RF-T5: notificação efêmera, sem dependência de módulo (ver T-5.2).
       emitFindashEvent('findash:transaction-added', { transaction });
     }
-    await refresh();
   }
 
   async function handleRemove(transaction: Transaction) {
     // RF-T3: exclusão com confirmação — o confirm nativo resolve o modal.
     if (!window.confirm(`Excluir "${transaction.description}"?`)) return;
-    await transactionRepository.remove(transaction.id);
+    await removeTransaction(transaction.id);
     if (editing?.id === transaction.id) setEditing(null);
-    await refresh();
   }
 
   // RF-T4: filtros client-side + ordenação por data (mais recente primeiro).
@@ -118,7 +115,7 @@ export default function TransactionsPage() {
                 size="sm"
                 onClick={async () => {
                   await seedDemoData();
-                  await refresh();
+                  await loadTransactions(true);
                 }}
               >
                 Usar dados de exemplo
