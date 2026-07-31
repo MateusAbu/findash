@@ -8,6 +8,10 @@ export default defineConfig({
     pluginModuleFederation({
       // O remote de UI. Nos hosts: remotes: { ds: 'ds@http://localhost:3001/...' }
       name: 'ds',
+      // T-6.1: embarca os tipos de deps internas (cva etc.) no @mf-types.zip —
+      // sem isso, hosts sem essas deps degradam os tipos para `any` em
+      // silêncio (skipLibCheck engole o import não resolvido).
+      dts: { generateTypes: { extractThirdParty: true } },
       // Um expose por componente (decisão T-2.4): hosts baixam só o que usam
       // e o cache invalida por componente, não pela biblioteca inteira.
       exposes: {

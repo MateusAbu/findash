@@ -5,8 +5,8 @@ node_modules/
 dist/
 build/
 
-# Module Federation — tipos baixados dos remotes (gerados em dev/build)
-@mf-types/
+# Module Federation — cache do runtime (tipos @mf-types/ são VERSIONADOS:
+# ADR-012 — typecheck em clone frio + contrato visível no diff de PR)
 .mf/
 
 # Ambiente
