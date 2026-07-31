@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import ToastHost from './ToastHost';
 
 // Rota de layout (sem path): a página ativa renderiza no <Outlet/>.
 export default function Layout() {
@@ -13,6 +14,7 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+      <ToastHost />
     </div>
   );
 }
