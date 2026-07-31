@@ -12,7 +12,19 @@
 
 (escreva aqui)
 
-## Store vs. eventos — primeiras impressões (vai amadurecer na T-5.3)
+## Store vs. eventos — minha tabela de decisão (critério de aceite da T-5.3)
 
-- Quando eu usaria a store:
-- Quando eu usaria um Custom Event:
+<!-- Complete com SUAS palavras, sem consultar a resposta da IA: -->
+
+| Critério | Store singleton | Custom Event |
+| --- | --- | --- |
+| Uso quando… | | |
+| Acoplamento que aceito | | |
+| Exemplo real do FinDash | | |
+| Falha clássica | | |
+
+Cenários (justifique cada escolha):
+
+1. Badge de notificações não lidas no header → store ou evento? Por quê?
+2. Filtro global de mês → store, evento ou outra coisa? Por quê?
+3. MFE de relatórios em Vue → como ele participa da comunicação?
