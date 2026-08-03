@@ -1,0 +1,108 @@
+# CI com pipelines independentes por app (T-7.1).
+# Paralelo Azure DevOps: este arquivo ⇆ azure-pipelines.yml.
+name: CI
+
+# ⇆ ADO: `pr:` (validação de PR) e `trigger: branches: [main]`.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  # ---------------------------------------------------------------------
+  # Job raiz: detecta O QUE mudou e emite a lista de apps afetados.
+  # ⇆ ADO: não há equivalente dinâmico nativo — trigger.paths é estático
+  #   por pipeline; lá o comum é 1 pipeline por app, cada um com seus paths.
+  # ---------------------------------------------------------------------
+  changes:
+    runs-on: ubuntu-latest # ⇆ ADO: pool { vmImage: ubuntu-latest }
+    permissions:
+      pull-requests: read
+    outputs:
+      apps: ${{ steps.apps.outputs.list }}
+      packages: ${{ steps.filter.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v4 # ⇆ ADO: step checkout: self
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          # O "grafo manual" (T-7.1): mudou packages/** ou o lockfile → tudo
+          # que depende roda (estratégia (a); Turborepo/Nx seria a (b)).
+          filters: |
+            packages:
+              - 'packages/**'
+              - 'pnpm-workspace.yaml'
+              - 'pnpm-lock.yaml'
+            shell:
+              - 'apps/shell/**'
+            design-system:
+              - 'apps/design-system/**'
+            mfe-overview:
+              - 'apps/mfe-overview/**'
+            mfe-transactions:
+              - 'apps/mfe-transactions/**'
+            mfe-goals:
+              - 'apps/mfe-goals/**'
+
+      - name: Monta a matriz de apps afetados
+        id: apps
+        env:
+          CHANGES: ${{ steps.filter.outputs.changes }}
+        run: |
+          # $CHANGES já é um array JSON com os nomes dos filtros que bateram.
+          if echo "$CHANGES" | grep -q '"packages"'; then
+            LIST='["shell","design-system","mfe-overview","mfe-transactions","mfe-goals"]'
+          else
+            LIST="$CHANGES"
+          fi
+          echo "list=$LIST" >> "$GITHUB_OUTPUT"
+          echo "Apps afetados: $LIST"
+
+  # ---------------------------------------------------------------------
+  # Checks dos pacotes compartilhados (só quando eles mudam).
+  # ---------------------------------------------------------------------
+  packages:
+    needs: changes # ⇆ ADO: dependsOn: changes
+    if: needs.changes.outputs.packages == 'true' # ⇆ ADO: condition:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4 # lê a versão do packageManager (Corepack)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm # ⇆ ADO: task Cache@2 apontando para o store do pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter "@findash/*" lint
+      - run: pnpm --filter "@findash/*" typecheck
+      - run: pnpm --filter "@findash/domain" smoke
+
+  # ---------------------------------------------------------------------
+  # Um job POR APP AFETADO, via matriz dinâmica (T-7.1: o coração do CI de
+  # MFE — PR no mfe-goals roda SÓ o mfe-goals).
+  # ⇆ ADO: strategy.matrix existe igual; a diferença é a matriz DINÂMICA
+  #   vinda de outro job (fromJSON), que o ADO não tem nativo.
+  # ---------------------------------------------------------------------
+  app:
+    needs: changes
+    if: needs.changes.outputs.apps != '[]' && needs.changes.outputs.apps != ''
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # um app quebrado não cancela os irmãos (autonomia!)
+      matrix:
+        app: ${{ fromJSON(needs.changes.outputs.apps) }}
+    name: app (${{ matrix.app }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter ${{ matrix.app }} lint
+      # typecheck frio funciona porque @mf-types é versionado (ADR-012).
+      - run: pnpm --filter ${{ matrix.app }} typecheck
+      - run: pnpm --filter ${{ matrix.app }} run --if-present test
+      - run: pnpm --filter ${{ matrix.app }} build

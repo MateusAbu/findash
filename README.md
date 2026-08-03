@@ -1,5 +1,7 @@
 # FinDash
 
+![CI](https://github.com/MateusAbu/findash/actions/workflows/ci.yml/badge.svg)
+
 Dashboard de finanças pessoais construído com **microfrontends** — Module Federation 2.0 + Rsbuild. Projeto de estudo guiado por spec ([Spec-Driven Development](docs/spec.md)).
 
 > O produto é simples de propósito. A complexidade — e o aprendizado — está na arquitetura.
